@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<ctype.h>
+#include<math.h>
+#include<string.h>
+#define max 100//gáng max=100
+int danhap=0;//số lượng sinh viên đã nhập
+typedef struct{
+    char masv[10];
+    char hoten[50];
+    char lop[50];
+    float diem;
+} sinhvien;
+sinhvien ds[max];//mảng lưu sinh viên với max là 100 học sinh
+void themsv()
+{
+    if(danhap>=max){
+        printf("khong the nhap them");
+        return;}
+    sinhvien sv;
+    printf("Nhap ma SV: "); fflush(stdin); fgets(sv.masv,sizeof(sv.masv),stdin); sv.masv[strcspn(sv.masv,"\n")] = 0;//fflush để xóa bộ nhớ đệm tránh bị dính dữ liệu từ lần nhập trc
+    printf("Nhap ho ten: "); fflush(stdin); fgets(sv.hoten,sizeof(sv.hoten),stdin); sv.hoten[strcspn(sv.hoten,"\n")] = 0;
+    printf("Nhap lop: "); fflush(stdin); fgets(sv.lop,sizeof(sv.lop),stdin); sv.lop[strcspn(sv.lop,"\n")] = 0;
+    printf("Nhap diem: "); scanf("%f", &sv.diem);
+    ds[danhap++]=sv;
+    printf("da them sinh vien");
+}
+void hienthisv()
+{
+    printf("\n%-10s %-25s %-10s %-5s\n", "MaSV", "Ho ten", "Lop", "Diem");//tạo bảng để hiện danh sách với 4 cột cách đều căn trái
+    printf("-----------------------------------------------------------\n");
+    for (int i = 0; i < danhap; i++) {
+        printf("%-10s %-25s %-10s %-5.2f\n", //tại sao lại dùng 10 25 10 và 5 thì do e tham khảo cách để tạo bảng trên mạng
+               ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);
+    }
+}
+void xoasv()
+{
+    char ma[10];
+    printf("Nhap ma SV can xoa: "); fflush(stdin); fgets(ma,sizeof(ma),stdin); ma[strcspn(ma,"\n")] = 0;//nhập mã sv muốn xóa
+     for (int i = 0; i < danhap; i++) {
+        if (strcmp(ds[i].masv, ma) == 0) {
+            printf("Tim thay: %s - %s - %s - %.2f\n",ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);//in thông tin sv muốn xóa
+            char confirm;
+            printf("Ban co chac chan muon xoa? (y/n): ");//xác thực rằng người dùng có thực sự muốn xóa sv này không
+            fflush(stdin);
+            scanf("%c", &confirm);
+
+            if (confirm == 'y' || confirm == 'Y') {
+                for (int j = i; j < danhap - 1; j++) {
+                    ds[j] = ds[j+1];//dịch các phần tử không cần xóa sang bên trái và xóa sv muốn xóa
+                }
+                danhap--;
+                printf("Xoa thanh cong!\n");
+            } else {
+                printf("Huy thao tac xoa!\n");//ghi nhận mọi ký tự khác y và Y là hủy
+            }
+            return;
+        }
+    }
+    printf("Khong tim thay de xoa!\n");//nếu ko gặp return có nghĩa là ko tìm thấy sv
+}
+void capnhatsv() {//không thể thay đổi mã sv vì là key
+    char ma[10];
+    char buffer[100];
+    printf("Nhap ma SV can cap nhat: "); fflush(stdin); fgets(ma,sizeof(ma),stdin); ma[strcspn(ma,"\n")] = 0;//nhập mã sv
+    for (int i = 0; i < danhap; i++) {
+        if (strcmp(ds[i].masv, ma) == 0) {
+            printf("Thong tin hien tai:\n");
+            printf("MaSV: %s | Ho ten: %s | Lop: %s | Diem: %.2f\n", 
+                   ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);//kiểm tra lại thông tin trc khi cập nhật
+            printf("Nhap ho ten moi (Enter de giu nguyen): ");//nhập tên 
+            fflush(stdin);
+            fgets(buffer, sizeof(buffer), stdin);//nhập tên mới dùng dùng fgets để tránh lỗi tràn bộ nhớ và nhận biết enter dễ hơn
+            if (buffer[0] != '\n') {//nếu buffer[0] thì sẽ giữ nguyên tên cũ
+                buffer[strcspn(buffer, "\n")] = 0; //xóa \n
+                strcpy(ds[i].hoten, buffer);// cập nhật tên mới
+            }
+            printf("Nhap lop moi (Enter de giu nguyen): ");//nhập lớp 
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                buffer[strcspn(buffer, "\n")] = 0;
+                strcpy(ds[i].lop, buffer);
+            }
+            printf("Nhap diem moi (Enter de giu nguyen): ");//cập nhật điểm
+            fgets(buffer, sizeof(buffer), stdin);
+            if (buffer[0] != '\n') {
+                ds[i].diem = atof(buffer);  // chuyển chuỗi sang số thực
+            }
+
+            printf("Cap nhat thanh cong!\n");
+            return;
+        }
+    }
+    printf("Khong tim thay sinh vien!\n");
+}
