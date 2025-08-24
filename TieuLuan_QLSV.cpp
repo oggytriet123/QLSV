@@ -148,7 +148,55 @@ void FindSV(sinhvien ds[],int danhap) {
 			}
 		}
 	}
+	if (choice == 2) {
+		printf("Nhap ho ten can tim: ");
+		fgets(key, sizeof(key), stdin);
+		key[strcspn(key, "\n")] = 0;
+		for (int i =0 ;i < danhap; i++) {
+			if (strcasecmp (ds[i].hoten, key) == 0) {
+				 printf("Da tim thay sinh vien !!!\n");
+                printf("Ma SV: %s | HoTen: %s | GioiTinh: %s | Lop: %s | Diem: %.2f\n",
+                       ds[i].masv, ds[i].hoten, ds[i].gioitinh, ds[i].lop, ds[i].diem);
+                found = 1;
+            }
+        }
+        if (!found) {
+            printf("Khong tim thay sinh vien voi ho ten: %s\n", key);
+        }
+    }
 }
+void sapxep() {
+    int choice;
+    printf("===== SAP XEP SINH VIEN =====\n");
+    printf("1. Sap xep theo Ma SV (A -> Z)\n");
+    printf("2. Sap xep theo Ho ten (A -> Z)\n");
+    printf("3. Sap xep theo Diem (Cao -> Thap)\n");
+    printf("Nhap lua chon: ");
+    scanf("%d", &choice);
+
+    for (int i = 0; i < danhap - 1; i++) {
+        for (int j = i + 1; j < danhap; j++) {
+            int cmp = 0;
+            if (choice == 1) {
+                cmp = strcmp(ds[i].masv, ds[j].masv) > 0;
+            } else if (choice == 2) {
+                cmp = strcasecmp(ds[i].hoten, ds[j].hoten) > 0;
+            } else if (choice == 3) {
+                cmp = ds[i].diem < ds[j].diem; // ði?m cao ð?ng trý?c
+            }
+
+            if (cmp) {
+                sinhvien temp = ds[i];
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+
+    printf("Da sap xep xong!\n");
+    hienthisv(); // hi?n th? danh sách sau khi s?p x?p
+}
+
 int main() {
     int choice;
     doctep();
@@ -159,6 +207,7 @@ int main() {
         printf("3. Xoa sinh vien\n");
         printf("4. Cap nhat thong tin sinh vien\n");
         printf("5. Tim kiem sinh vien\n");
+        printf("6. Sap xep sinh vien\n");
         printf("0. Thoat\n");
         printf("==========================================\n");
         printf("Nhap lua chon: ");
@@ -184,6 +233,11 @@ int main() {
             	FindSV(ds,danhap);
             	ghitep();
             	break;
+            case 6:
+    			sapxep();
+    			ghitep();
+    			break;
+
             	
             case 0:
                 printf("Thoat chuong trinh.\n");
