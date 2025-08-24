@@ -119,11 +119,35 @@ void doctep() {
     while (fscanf(f, "%9[^|]|%49[^|]|%49[^|]|%9[^|]|%f\n",
                   ds[danhap].masv, ds[danhap].hoten, ds[danhap].gioitinh, 
                   ds[danhap].lop, &ds[danhap].diem) == 5) {
-        danhap++;
+        danhap++;;
         if (danhap >= max) break;
     }
     fclose(f);
     printf("Da doc du lieu tu tep, hien co %d sinh vien.\n", danhap);
+}
+void FindSV(sinhvien ds[],int danhap) {
+	int choice;
+	char key[50];
+	int found = 0;
+	printf("=====Tim Kiem Sinh Vien=====\n");
+	printf("1.Tim kiem bang ma so sinh vien\n");
+	printf("2.Tim kiem bang ho ten\n");
+	printf("==============================\n");
+	printf("Nhap lua chon: ");
+	scanf("%d",&choice);
+	getchar();
+	if (choice == 1) {
+		printf("Nhap ma so sinh vien can tim: ");
+		gets(key);
+		for (int i =0;i < danhap;i++) {
+			if (strcmp(ds[i].masv,key) == 0) {
+				printf("Da tim thay sinh vien !!!\n");
+				printf("Ma SV: %s| HoTen: %s| GioiTinh: %s| Lop: %s| Diem: %.2f \n",
+						ds[i].masv,ds[i].hoten,ds[i].gioitinh,ds[i].lop,ds[i].diem);
+				
+			}
+		}
+	}
 }
 int main() {
     int choice;
@@ -134,6 +158,7 @@ int main() {
         printf("2. Hien thi danh sach sinh vien\n");
         printf("3. Xoa sinh vien\n");
         printf("4. Cap nhat thong tin sinh vien\n");
+        printf("5. Tim kiem sinh vien\n");
         printf("0. Thoat\n");
         printf("==========================================\n");
         printf("Nhap lua chon: ");
@@ -155,6 +180,11 @@ int main() {
                 capnhatsv();
                 ghitep();
                 break;
+            case 5:
+            	FindSV(ds,danhap);
+            	ghitep();
+            	break;
+            	
             case 0:
                 printf("Thoat chuong trinh.\n");
                 break;
