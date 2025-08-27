@@ -5,6 +5,7 @@
 #include<string.h>
 #define max 100//gáng max=100
 int danhap=0;//so luong sinh vien da nhap
+//
 typedef struct{
     char masv[10];
     char hoten[50];
