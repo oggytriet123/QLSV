@@ -52,7 +52,7 @@ void themsv(sinhvien ds[], int *danhap) {
         break;
     }
     printf("Nhap ho ten: "); fflush(stdin); fgets(sv.hoten, sizeof(sv.hoten), stdin); sv.hoten[strcspn(sv.hoten, "\n")] = 0;
-    printf("Gioi tinh: "); fflush(stdin); fgets(sv.gioitinh, sizeof(sv.gioitinh), stdin); sv.gioitinh[strcspn(sv.gioitinh, "\n")] = 0;
+    printf("Gioi tinh: "); fflush(stdin); fgets(sv.gioitinh, sizeof(sv.gioitinh), stdin); sv.gioitinh[strcspn(sv.gioitinh, "\n")] = 0;if (strcmp(sv.gioitinh, "nam") != 0 && strcmp(sv.gioitinh, "nu") != 0){printf("loi\n");return;}
     printf("Nhap lop: "); fflush(stdin); fgets(sv.lop, sizeof(sv.lop), stdin); sv.lop[strcspn(sv.lop, "\n")] = 0;
     while (1) {
         printf("Nhap diem (1.0 - 4.0): ");
@@ -73,10 +73,10 @@ void themsv(sinhvien ds[], int *danhap) {
 }
 
 void hienthisv(sinhvien ds[], int danhap) {
-    printf("\n%-10s %-25s %-10s %-10s %-5s\n", "MaSV", "Ho ten", "Gioi tinh", "Lop", "Diem");
-    printf("---------------------------------------------------------------\n");
+    printf("\n%-10s %-25s %-10s %-20s %-5s\n", "MaSV", "Ho ten", "Gioi tinh", "Lop", "Diem");
+    printf("-------------------------------------------------------------------------------------\n");
     for (int i = 0; i < danhap; i++) {
-        printf("%-10s %-25s %-10s %-10s %-5.2f\n",
+        printf("%-10s %-25s %-10s %-20s %-5.2f\n",
                ds[i].masv, ds[i].hoten, ds[i].gioitinh, ds[i].lop, ds[i].diem);
     }
 }
@@ -276,7 +276,7 @@ int main() {
         switch (choice) {
             case 1:{
                 int n;
-                printf("Ban muon nhap bao nhiu sinh vien");
+                printf("Ban muon nhap bao nhiu sinh vien ");
                 scanf("%d",&n);
                 for(int i=0;i<n;i++)
                 {
@@ -287,10 +287,14 @@ int main() {
             case 2:
                 hienthisv(ds, danhap);
                 break;
-            case 3:
-                xoasv(ds, &danhap);
+            case 3:{
+                int n;
+                printf("ban muon xoa bao nhiu sinh vien ");
+                scanf("%d",&n);
+                for(int i=0;i<n;i++)
+                {xoasv(ds, &danhap);}
                 ghitep(ds, danhap);
-                break;
+                break;}
             case 4:
                 capnhatsv(ds, danhap);
                 ghitep(ds, danhap);
