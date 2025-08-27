@@ -4,7 +4,7 @@
 #include<math.h>
 #include<string.h>
 #define max 100//gáng max=100
-int danhap=0;//s? lý?ng sinh viên ð? nh?p
+int danhap=0;//so luong sinh vien da nhap
 typedef struct{
     char masv[10];
     char hoten[50];
@@ -13,17 +13,60 @@ typedef struct{
     char gioitinh[10];
 } sinhvien;
 sinhvien ds[max];//m?ng lýu sinh viên v?i max là 100 h?c sinh
+int checkTrungMSSV(char *ma) {
+    for (int i = 0; i < danhap; i++) {
+        if (strcmp(ds[i].masv, ma) == 0) {
+            return 1; // trùng
+        }
+    }
+    return 0;
+}
+
+int laSo(char *s) {
+    for (int i = 0; s[i] != '\0'; i++) {
+        if (!isdigit(s[i])) return 0;
+    }
+    return 1;
+}
+
 void themsv()
 {
     if(danhap>=max){
         printf("khong the nhap them");
         return;}
     sinhvien sv;
-    printf("Nhap ma SV: "); fflush(stdin); fgets(sv.masv,sizeof(sv.masv),stdin); sv.masv[strcspn(sv.masv,"\n")] = 0;//fflush ð? xóa b? nh? ð?m tránh b? dính d? li?u t? l?n nh?p trc
+    while (1) {
+    printf("Nhap ma SV (chi duoc nhap so, khong trung): ");
+    fflush(stdin);
+    fgets(sv.masv, sizeof(sv.masv), stdin);
+    sv.masv[strcspn(sv.masv, "\n")] = 0;
+
+    if (!laSo(sv.masv)) {
+        printf("Ma SV chi duoc phep la so!\n");
+        continue;
+    }
+    if (checkTrungMSSV(sv.masv)) {
+        printf("Ma SV da ton tai!\n");
+        continue;
+    }
+    break;
+}
     printf("Nhap ho ten: "); fflush(stdin); fgets(sv.hoten,sizeof(sv.hoten),stdin); sv.hoten[strcspn(sv.hoten,"\n")] = 0;
     printf("Gioi tinh: "); fflush(stdin); fgets(sv.gioitinh,sizeof(sv.gioitinh),stdin); sv.gioitinh[strcspn(sv.gioitinh,"\n")] = 0;
     printf("Nhap lop: "); fflush(stdin); fgets(sv.lop,sizeof(sv.lop),stdin); sv.lop[strcspn(sv.lop,"\n")] = 0;
-    printf("Nhap diem: "); scanf("%f", &sv.diem);
+    while (1) {
+    printf("Nhap diem (1.0 - 4.0): ");
+    if (scanf("%f", &sv.diem) != 1) {
+        printf("Vui long nhap so!\n");
+        while(getchar()!='\n'); // clear buffer
+        continue;
+    }
+    if (sv.diem < 1.0 || sv.diem > 4.0) {
+        printf("Diem phai trong khoang 1.0 - 4.0!\n");
+        continue;
+    }
+    break;
+}
     ds[danhap++]=sv;
     printf("da them sinh vien");
 }
@@ -73,7 +116,7 @@ void capnhatsv() {//không th? thay ð?i m? sv v? là key
                    ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);//ki?m tra l?i thông tin trc khi c?p nh?t
             printf("Nhap ho ten moi (Enter de giu nguyen): ");//nh?p tên 
             fflush(stdin);
-            fgets(buffer, sizeof(buffer), stdin);//nh?p tên m?i dùng dùng fgets ð? tránh l?i tràn b? nh? và nh?n bi?t enter d? hõn
+            fgets(buffer, sizeof(buffer), stdin);
             if (buffer[0] != '\n') {//n?u buffer[0] th? s? gi? nguyên tên c?
                 buffer[strcspn(buffer, "\n")] = 0; //xóa \n
                 strcpy(ds[i].hoten, buffer);// c?p nh?t tên m?i
@@ -201,7 +244,7 @@ int main() {
     int choice;
     doctep();
     do {
-        printf("\n===== CHUONG TRINH QUAN LY SINH VIEN =====\n");
+        printf("\n\033[1;31m===== CHUONG TRINH QUAN LY SINH VIEN =====\033[0m\n");
         printf("1. Them sinh vien\n");
         printf("2. Hien thi danh sach sinh vien\n");
         printf("3. Xoa sinh vien\n");
