@@ -1,363 +1,135 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include<ctype.h>
-#include<math.h>
-#include<string.h>
-#define max 100//g·ng max=100
-int danhap=0;//so luong sinh vien da nhap
-//
-typedef struct{
+#include <string.h>
+#include <ctype.h>
+
+struct SinhVien {
     char masv[10];
     char hoten[50];
-    char lop[50];
+    char lop[20];
     float diem;
-    char gioitinh[10];
-} sinhvien;
-sinhvien ds[max];//m?ng l˝u sinh viÍn v?i max l‡ 100 h?c sinh
-int checkTrungMSSV(char *ma) {
-    for (int i = 0; i < danhap; i++) {
-        if (strcmp(ds[i].masv, ma) == 0) {
-            return 1; // tr˘ng
-        }
-    }
-    return 0;
-}
+};
 
-int laSo(char *s) {
-    for (int i = 0; s[i] != '\0'; i++) {
-        if (!isdigit(s[i])) return 0;
-    }
-    return 1;
-}
-
-void themsv()
-{
-    if(danhap>=max){
-        printf("khong the nhap them");
-        return;}
-    sinhvien sv;
-    while (1) {
-    printf("Nhap ma SV (chi duoc nhap so, khong trung): ");
-    fflush(stdin);
-    fgets(sv.masv, sizeof(sv.masv), stdin);
-    sv.masv[strcspn(sv.masv, "\n")] = 0;
-
-    if (!laSo(sv.masv)) {
-        printf("Ma SV chi duoc phep la so!\n");
-        continue;
-    }
-    if (checkTrungMSSV(sv.masv)) {
-        printf("Ma SV da ton tai!\n");
-        continue;
-    }
-    break;
-}
-    printf("Nhap ho ten: "); fflush(stdin); fgets(sv.hoten,sizeof(sv.hoten),stdin); sv.hoten[strcspn(sv.hoten,"\n")] = 0;
-    printf("Gioi tinh: "); fflush(stdin); fgets(sv.gioitinh,sizeof(sv.gioitinh),stdin); sv.gioitinh[strcspn(sv.gioitinh,"\n")] = 0;
-    printf("Nhap lop: "); fflush(stdin); fgets(sv.lop,sizeof(sv.lop),stdin); sv.lop[strcspn(sv.lop,"\n")] = 0;
-    while (1) {
-    printf("Nhap diem (1.0 - 4.0): ");
-    if (scanf("%f", &sv.diem) != 1) {
-        printf("Vui long nhap so!\n");
-        while(getchar()!='\n'); // clear buffer
-        continue;
-    }
-    if (sv.diem < 1.0 || sv.diem > 4.0) {
-        printf("Diem phai trong khoang 1.0 - 4.0!\n");
-        continue;
-    }
-    break;
-}
-    ds[danhap++]=sv;
-    printf("da them sinh vien");
-}
-void hienthisv()
-{
-    printf("\n%-10s %-25s %-10s %-10s %-5s\n", "MaSV", "Ho ten","Gioi tinh", "Lop", "Diem");//t?o b?ng ? hi?n danh s·ch v?i 4 c?t c·ch ?u c„n tr·i
-    printf("---------------------------------------------------------------\n");
-    for (int i = 0; i < danhap; i++) {
-        printf("%-10s %-25s %-10s %-10s %-5.2f\n", //t?i sao l?i d˘ng 10 25 10 v‡ 5 th? do e tham kh?o c·ch ? t?o b?ng trÍn m?ng
-               ds[i].masv, ds[i].hoten,ds[i].gioitinh, ds[i].lop, ds[i].diem);
-    }
-}
-void xoasv()
-{
-    char ma[10];
-    printf("Nhap ma SV can xoa: "); fflush(stdin); fgets(ma,sizeof(ma),stdin); ma[strcspn(ma,"\n")] = 0;//nh?p m? sv mu?n xÛa
-     for (int i = 0; i < danhap; i++) {
-        if (strcmp(ds[i].masv, ma) == 0) {
-            printf("Tim thay: %s - %s - %s - %.2f\n",ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);//in thÙng tin sv mu?n xÛa
-            char confirm;
-            printf("Ban co chac chan muon xoa? (y/n): ");//x·c th?c r?ng ng˝?i d˘ng cÛ th?c s? mu?n xÛa sv n‡y khÙng
-            fflush(stdin);
-            scanf("%c", &confirm);
-
-            if (confirm == 'y' || confirm == 'Y') {
-                for (int j = i; j < danhap - 1; j++) {
-                    ds[j] = ds[j+1];//d?ch c·c ph?n t? khÙng c?n xÛa sang bÍn tr·i v‡ xÛa sv mu?n xÛa
-                }
-                danhap--;
-                printf("Xoa thanh cong!\n");
-            } else {
-                printf("Huy thao tac xoa!\n");//ghi nh?n m?i k? t? kh·c y v‡ Y l‡ h?y
-            }
-            return;
-        }
-    }
-    printf("Khong tim thay de xoa!\n");//n?u ko g?p return cÛ ngh?a l‡ ko t?m th?y sv
-}                                                                                    
- void capnhatsv(sinhvien ds[], int danhap,char ma[], char newHoten[], char newLop[], float newDiem) {
- for (int i = 0; i < danhap; i++) {
-if (strcmp(ds[i].masv, ma) == 0) { // So sánh mã SV
-if (strlen(newHoten) > 0) strcpy(ds[i].hoten, newHoten); // Nếu có nhập tên mới thì cập nhật
-if (strlen(newLop) > 0) strcpy(ds[i].lop, newLop); // Nếu có nhập lớp mới thì cập nhật
-if (newDiem >= 0) ds[i].diem = newDiem; // Nếu có nhập điểm >= 0 thì cập nhật
-printf("Cap nhat thanh cong!\n");
-return;
-}
-}
-printf("Khong tim thay sinh vien!\n"); // Nếu không tìm thấy
-}
-int timkiemTheoMa(sinhvien ds[], int danhap, char ma[]) {
-for (int i = 0; i < danhap; i++) {
-if (strcmp(ds[i].masv, ma) == 0) { // Nếu mã trùng
-return i; // Trả về vị trí tìm thấy
-}
-}
-return -1; // Không tìm thấy 
-}
- void sapxepsvTheoDiem(sinhvien ds[], int danhap) {
-for (int i = 0; i < danhap - 1; i++) {
-for (int j = 0; j < danhap - i - 1; j++) {
-if (ds[j].diem > ds[j+1].diem) { // So sánh điểm
-sinhvien temp = ds[j]; // Đổi chỗ nếu sai thứ tự
-ds[j] = ds[j+1];
-ds[j+1] = temp;
-}
-}
-}
-printf("Da sap xep danh sach theo diem tang dan!\n");
-}
-void inds(SinhVien ds[], int n) {
-    printf("\n=== DANH SACH SINH VIEN ===\n");
-
- +In tiêu đề bảng
-    printf("%-10s | %-20s | %-10s | %-5s\n",
-           "MaSV", "Ho Ten", "Lop", "Diem");
-    printf("------------------------------------------------------\n");
-
-  + Duyệt qua từng sinh viên và in ra
+//  In danh sách sinh viên 
+void inds(struct SinhVien ds[], int n) {
+    printf("%-10s %-25s %-10s %-10s\n", "MaSV", "Ho Ten", "Lop", "Diem");
     for (int i = 0; i < n; i++) {
-        printf("%-10s | %-20s | %-10s | %.2f\n",
+        printf("%-10s %-25s %-10s %-10.2f\n",
                ds[i].masv, ds[i].hoten, ds[i].lop, ds[i].diem);
     }
 }
-// %-10s là ib chuỗi nhma căn trái trong ô rộng 10 ký tự
-int main() {
-sinhvien ds[3] = {
-{"SVTHUNHAT”, “Le Tien Dat”, “KHMT20A”, 7.0},
-{"SVTHUHAI”, "Le Tuan Anh”, “KHMT20A”, 8.0},
-{"SVTHUBA", “Ha Trong Trung”, “KHMT20B”, 7.5}
-};
-int danhap = 3; 
-// In danh sách ban đầu
-printf("=== DANH SACH BAN DAU ===\n");
-inds(ds, danhap);
 
-//tom kiem theo ma
-char ma[10];
-printf("\nNhap ma sinh vien can tim: ");
-fgets(ma, sizeof(ma), stdin);
-ma[strcspn(ma, "\n")] = '\0';   // xóa ký tự xuống dòng
-
-int vitri = timkiemTheoMa(ds, danhap, ma);
-
-if (vitri == -1) {
-    printf("Khong tim thay sinh vien co ma %s\n", ma);
-} else {
-    printf("Thong tin sinh vien tim thay:\n");
-    printf("%s | %s | %s | %.2f\n",
-           ds[vitri].masv,
-           ds[vitri].hoten,
-           ds[vitri].lop,
-           ds[vitri].diem);
-}
-//tim kiem theo ten cua sinh vien
-char ten[50];
-printf("\nNhap ten sinh vien can tim: ");
-fgets(ten, sizeof(ten), stdin);
-ten[strcspn(ten, "\n")] = '\0';
-
-vitri = timkiemTheoTen(ds, danhap, ten);
-
-if (vitri == -1) {
-    printf("Khong tim thay sinh vien ten %s\n", ten);
-} else {
-    printf("Thong tin sinh vien tim thay:\n");
-    printf("%s | %s | %s | %.2f\n",
-           ds[vitri].masv,
-           ds[vitri].hoten,
-           ds[vitri].lop,
-           ds[vitri].diem);
+//  Tìm kiếm theo mã SV 
+int timkiemTheoMa(struct SinhVien ds[], int n, char ma[]) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(ds[i].masv, ma) == 0) {
+            return i; // Trả về vị trí tìm thấy
+        }
+    }
+    return -1; // Không tìm thấy
 }
 
-sapxepsvTheoDiem(ds, danhap);
+// Hàm đổi chuỗi sang chữ thường (để so sánh không phân biệt hoa/thường) 
+void toLowerCase(char s[]) {
+    for (int i = 0; s[i]; i++) {
+        s[i] = tolower(s[i]);
+    }
+}
 
-printf("\n=== DANH SACH SAU KHI SAP XEP THEO DIEM ===\n");
-inds(ds, danhap);
+//  Tìm kiếm theo tên (không phân biệt hoa/thường)
+int timkiemTheoTen(struct SinhVien ds[], int n, char ten[]) {
+    char tempTen[50], tempHoten[50];
 
-return 0;
+    strcpy(tempTen, ten);
+    toLowerCase(tempTen);
+
+    for (int i = 0; i < n; i++) {
+        strcpy(tempHoten, ds[i].hoten);
+        toLowerCase(tempHoten);
+
+        if (strstr(tempHoten, tempTen) != NULL) { 
+            // strstr() trả về con trỏ nếu tìm thấy
+            return i;
+        }
+    }
+    return -1;
 }
-void ghitep() {
-	FILE *f = fopen("sinhvien.txt","w");
-	if(f == NULL) {
-		printf("Khong the mo tep de ghi");
-		return;
-}
-	for (int i =0; i < danhap;i++) {
-		fprintf(f,"%s|%s|%s|%s|%.2f\n",
-					ds[i].masv,ds[i].hoten,ds[i].gioitinh,ds[i].lop,ds[i].diem);
-		}
-	fclose(f);
-	printf("Da ghi du lieu vao file");
-}
-void doctep() {
-    FILE *f = fopen("sinhvien.txt", "r");
-    if (f == NULL) {
-        printf("Khong tim thay tep, bat dau voi danh sach rong.\n");
+
+//  Cập nhật thông tin sinh viên theo mã 
+void capnhatsv(struct SinhVien ds[], int n) {
+    char ma[10];
+    printf("Nhap ma SV can cap nhat: ");
+    fflush(stdin);
+    fgets(ma, sizeof(ma), stdin);
+    ma[strcspn(ma, "\n")] = 0; // xóa ký tự xuống dòng
+
+    int vitri = timkiemTheoMa(ds, n, ma);
+    if (vitri == -1) {
+        printf("Khong tim thay sinh vien co ma %s\n", ma);
         return;
     }
-    danhap = 0;
-    while (fscanf(f, "%9[^|]|%49[^|]|%49[^|]|%9[^|]|%f\n",
-                  ds[danhap].masv, ds[danhap].hoten, ds[danhap].gioitinh, 
-                  ds[danhap].lop, &ds[danhap].diem) == 5) {
-        danhap++;;
-        if (danhap >= max) break;
-    }
-    fclose(f);
-    printf("Da doc du lieu tu tep, hien co %d sinh vien.\n", danhap);
-}
-void FindSV(sinhvien ds[],int danhap) {
-	int choice;
-	char key[50];
-	int found = 0;
-	printf("=====Tim Kiem Sinh Vien=====\n");
-	printf("1.Tim kiem bang ma so sinh vien\n");
-	printf("2.Tim kiem bang ho ten\n");
-	printf("==============================\n");
-	printf("Nhap lua chon: ");
-	scanf("%d",&choice);
-	getchar();
-	if (choice == 1) {
-		printf("Nhap ma so sinh vien can tim: ");
-		gets(key);
-		for (int i =0;i < danhap;i++) {
-			if (strcmp(ds[i].masv,key) == 0) {
-				printf("Da tim thay sinh vien !!!\n");
-				printf("Ma SV: %s| HoTen: %s| GioiTinh: %s| Lop: %s| Diem: %.2f \n",
-						ds[i].masv,ds[i].hoten,ds[i].gioitinh,ds[i].lop,ds[i].diem);
-				
-			}
-		}
-	}
-	if (choice == 2) {
-		printf("Nhap ho ten can tim: ");
-		fgets(key, sizeof(key), stdin);
-		key[strcspn(key, "\n")] = 0;
-		for (int i =0 ;i < danhap; i++) {
-			if (strcasecmp (ds[i].hoten, key) == 0) {
-				 printf("Da tim thay sinh vien !!!\n");
-                printf("Ma SV: %s | HoTen: %s | GioiTinh: %s | Lop: %s | Diem: %.2f\n",
-                       ds[i].masv, ds[i].hoten, ds[i].gioitinh, ds[i].lop, ds[i].diem);
-                found = 1;
-            }
-        }
-        if (!found) {
-            printf("Khong tim thay sinh vien voi ho ten: %s\n", key);
-        }
-    }
-}
-void sapxep() {
-    int choice;
-    printf("===== SAP XEP SINH VIEN =====\n");
-    printf("1. Sap xep theo Ma SV (A -> Z)\n");
-    printf("2. Sap xep theo Ho ten (A -> Z)\n");
-    printf("3. Sap xep theo Diem (Cao -> Thap)\n");
-    printf("Nhap lua chon: ");
-    scanf("%d", &choice);
 
-    for (int i = 0; i < danhap - 1; i++) {
-        for (int j = i + 1; j < danhap; j++) {
-            int cmp = 0;
-            if (choice == 1) {
-                cmp = strcmp(ds[i].masv, ds[j].masv) > 0;
-            } else if (choice == 2) {
-                cmp = strcasecmp(ds[i].hoten, ds[j].hoten) > 0;
-            } else if (choice == 3) {
-                cmp = ds[i].diem < ds[j].diem; // i?m cao ?ng tr˝?c
-            }
+    printf("Nhap ten moi: ");
+    fflush(stdin);
+    fgets(ds[vitri].hoten, sizeof(ds[vitri].hoten), stdin);
+    ds[vitri].hoten[strcspn(ds[vitri].hoten, "\n")] = 0;
 
-            if (cmp) {
-                sinhvien temp = ds[i];
-                ds[i] = ds[j];
-                ds[j] = temp;
-            }
-        }
-    }
+    printf("Nhap lop moi: ");
+    fflush(stdin);
+    fgets(ds[vitri].lop, sizeof(ds[vitri].lop), stdin);
+    ds[vitri].lop[strcspn(ds[vitri].lop, "\n")] = 0;
 
-    printf("Da sap xep xong!\n");
-    hienthisv(); // hi?n th? danh s·ch sau khi s?p x?p
+    printf("Nhap diem moi: ");
+    scanf("%f", &ds[vitri].diem);
+
+    printf("==> Da cap nhat thong tin sinh vien!\n");
 }
 
+// Hàm main 
 int main() {
-    int choice;
-    doctep();
-    do {
-        printf("\n\033[1;31m===== CHUONG TRINH QUAN LY SINH VIEN =====\033[0m\n");
-        printf("1. Them sinh vien\n");
-        printf("2. Hien thi danh sach sinh vien\n");
-        printf("3. Xoa sinh vien\n");
-        printf("4. Cap nhat thong tin sinh vien\n");
-        printf("5. Tim kiem sinh vien\n");
-        printf("6. Sap xep sinh vien\n");
-        printf("0. Thoat\n");
-        printf("==========================================\n");
-        printf("Nhap lua chon: ");
-        scanf("%d", &choice);
+    struct SinhVien ds[100] = {
+        {"SVTHUNHAT", "LE TIEN DAT", "KHMT20A", 7.0},
+        {"SVTHUHAI", "LE TUAN ANH", "KHMT20A", 8.0},
+        {"SVTHUBA", "HA TRONG TRUNG", "KHMT20B", 7.5}
+    };
+    int n = 3;
 
-        switch(choice) {
-            case 1:
-                themsv();
-                ghitep();
-                break;
-            case 2:
-                hienthisv();
-                break;
-            case 3:
-                xoasv();
-                ghitep();
-                break;
-            case 4:
-                capnhatsv();
-                ghitep();
-                break;
-            case 5:
-            	FindSV(ds,danhap);
-            	ghitep();
-            	break;
-            case 6:
-    			sapxep();
-    			ghitep();
-    			break;
+    printf(" DANH SACH BAN DAU \n");
+    inds(ds, n);
 
-            	
-            case 0:
-                printf("Thoat chuong trinh.\n");
-                break;
-            default:
-                printf("Lua chon khong hop le! Vui long nhap lai.\n");
-        }
-    } while(choice != 0);
+    // Tìm theo mã 
+    char ma[10];
+    printf("\nNhap ma SV can tim: ");
+    fflush(stdin);
+    fgets(ma, sizeof(ma), stdin);
+    ma[strcspn(ma, "\n")] = 0;
+
+    int pos = timkiemTheoMa(ds, n, ma);
+    if (pos != -1) {
+        printf("Tim thay: %s - %s - %s - %.2f\n",ds[pos].masv, ds[pos].hoten, ds[pos].lop, ds[pos].diem);
+    } else {
+        printf("Khong tim thay sinh vien co ma %s\n", ma);
+    }
+
+    //  Tìm theo tên 
+    char ten[50];
+    printf("\nNhap ten SV can tim: ");
+    fflush(stdin);
+    fgets(ten, sizeof(ten), stdin);
+    ten[strcspn(ten, "\n")] = 0;
+
+    pos = timkiemTheoTen(ds, n, ten);
+    if (pos != -1) {
+        printf("Tim thay: %s - %s - %s - %.2f\n",
+               ds[pos].masv, ds[pos].hoten, ds[pos].lop, ds[pos].diem);
+    } else {
+        printf("Khong tim thay sinh vien co ten %s\n", ten);
+    }
+
+    //  Cập nhật thông tin
+    capnhatsv(ds, n);
+
+    printf("\n DANH SACH SAU KHI CAP NHAT \n");
+    inds(ds, n);
 
     return 0;
 }
