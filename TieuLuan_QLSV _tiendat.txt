@@ -157,7 +157,7 @@ int main() {
 sinhvien ds[3] = {
 {"SVTHUNHAT”, “Le Tien Dat”, “KHMT20A”, 7.0},
 {"SVTHUHAI”, "Le Tuan Anh”, “KHMT20A”, 8.0},
-{"SV03", “Ha Trong Trung”, “KHMT20B”, 7.5}
+{"SVTHUBA", “Ha Trong Trung”, “KHMT20B”, 7.5}
 };
 int danhap = 3; 
 // In danh sách ban đầu
