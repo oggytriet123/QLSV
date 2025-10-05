@@ -74,7 +74,7 @@ void timKiem(Node* head) {
             return;
         }
     }
-    printf("❌ Khong tim thay sinh vien.\n");
+    printf("Khong tim thay sinh vien.\n");
 }
 
 // 4. Xóa sinh viên
